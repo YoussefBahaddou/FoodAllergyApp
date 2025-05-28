@@ -28,56 +28,69 @@ public class AllergenAdapter extends RecyclerView.Adapter<AllergenAdapter.Allerg
     @Override
     public AllergenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_allergen, parent, false);
+                .inflate(R.layout.item_allergen_selection, parent, false);
         return new AllergenViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AllergenViewHolder holder, int position) {
         AllergySelectionActivity.Allergen allergen = allergens.get(position);
-        holder.bind(allergen);
+        holder.bind(allergen, listener);
     }
 
     @Override
     public int getItemCount() {
-        return allergens.size();
+        return allergens != null ? allergens.size() : 0;
     }
 
-    class AllergenViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvAllergenName;
-        private TextView tvAllergenDescription;
-        private CheckBox cbAllergen;
+    public void updateAllergens(List<AllergySelectionActivity.Allergen> newAllergens) {
+        this.allergens = newAllergens;
+        notifyDataSetChanged();
+    }
+
+    static class AllergenViewHolder extends RecyclerView.ViewHolder {
+        private TextView textAllergenName;
+        private TextView textAllergenDescription;
+        private CheckBox checkboxAllergen;
 
         public AllergenViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvAllergenName = itemView.findViewById(R.id.tv_allergen_name);
-            tvAllergenDescription = itemView.findViewById(R.id.tv_allergen_description);
-            cbAllergen = itemView.findViewById(R.id.cb_allergen);
+            textAllergenName = itemView.findViewById(R.id.text_allergen_name);
+            textAllergenDescription = itemView.findViewById(R.id.text_allergen_description);
+            checkboxAllergen = itemView.findViewById(R.id.checkbox_allergen);
         }
 
-        public void bind(AllergySelectionActivity.Allergen allergen) {
-            tvAllergenName.setText(allergen.getName());
-            tvAllergenDescription.setText(allergen.getDescription());
-            cbAllergen.setChecked(allergen.isSelected());
+        public void bind(AllergySelectionActivity.Allergen allergen, OnAllergenClickListener listener) {
+            if (textAllergenName != null) {
+                textAllergenName.setText(allergen.getName());
+            }
 
-            // Handle checkbox clicks
-            cbAllergen.setOnCheckedChangeListener(null); // Clear previous listener
-            cbAllergen.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                allergen.setSelected(isChecked);
-                if (listener != null) {
-                    listener.onAllergenClick(allergen, isChecked);
-                }
-            });
+            if (textAllergenDescription != null) {
+                textAllergenDescription.setText(allergen.getDescription());
+            }
 
-            // Handle item clicks
-            itemView.setOnClickListener(v -> {
-                boolean newState = !allergen.isSelected();
-                allergen.setSelected(newState);
-                cbAllergen.setChecked(newState);
-                if (listener != null) {
-                    listener.onAllergenClick(allergen, newState);
-                }
-            });
+            if (checkboxAllergen != null) {
+                checkboxAllergen.setChecked(allergen.isSelected());
+
+                // Set click listener for the entire item
+                itemView.setOnClickListener(v -> {
+                    boolean newState = !checkboxAllergen.isChecked();
+                    checkboxAllergen.setChecked(newState);
+                    allergen.setSelected(newState);
+                    if (listener != null) {
+                        listener.onAllergenClick(allergen, newState);
+                    }
+                });
+
+                // Set click listener for the checkbox
+                checkboxAllergen.setOnClickListener(v -> {
+                    boolean isChecked = checkboxAllergen.isChecked();
+                    allergen.setSelected(isChecked);
+                    if (listener != null) {
+                        listener.onAllergenClick(allergen, isChecked);
+                    }
+                });
+            }
         }
     }
 }

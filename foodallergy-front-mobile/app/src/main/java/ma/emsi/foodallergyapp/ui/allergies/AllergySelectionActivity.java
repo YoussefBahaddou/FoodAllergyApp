@@ -2,25 +2,22 @@ package ma.emsi.foodallergyapp.ui.allergies;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import ma.emsi.foodallergyapp.MainActivity;
+import ma.emsi.foodallergyapp.R;
 import ma.emsi.foodallergyapp.auth.AuthManager;
-import ma.emsi.foodallergyapp.auth.LoginActivity;
 import ma.emsi.foodallergyapp.databinding.ActivityAllergySelectionBinding;
 import ma.emsi.foodallergyapp.utils.SupabaseClientHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllergySelectionActivity extends AppCompatActivity {
+public class AllergySelectionActivity extends AppCompatActivity implements AllergySelectionAdapter.OnAllergenClickListener {
 
-    private static final String TAG = "AllergySelectionActivity";
     private ActivityAllergySelectionBinding binding;
-    private AllergenAdapter adapter;
+    private AllergySelectionAdapter adapter;
     private List<Allergen> allergenList;
     private List<Allergen> selectedAllergens;
     private SupabaseClientHelper supabaseClient;
@@ -32,65 +29,53 @@ public class AllergySelectionActivity extends AppCompatActivity {
         binding = ActivityAllergySelectionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        authManager = new AuthManager(this);
-        supabaseClient = SupabaseClientHelper.getInstance();
-
-        // Check if user is logged in
-        if (!authManager.isLoggedIn()) {
-            navigateToLogin();
-            return;
-        }
-
-        setupViews();
+        initializeComponents();
+        setupToolbar();
         setupRecyclerView();
+        setupClickListeners();
         loadAllergens();
     }
 
-    private void setupViews() {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Select Your Allergies");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+    private void initializeComponents() {
+        supabaseClient = SupabaseClientHelper.getInstance();
+        authManager = AuthManager.getInstance(this);
+        allergenList = new ArrayList<>();
+        selectedAllergens = new ArrayList<>();
+    }
 
+    private void setupToolbar() {
+        setSupportActionBar(binding.toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getString(R.string.select_allergies));
+        }
+        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+    private void setupRecyclerView() {
+        adapter = new AllergySelectionAdapter(allergenList, this);
+        binding.recyclerAllergens.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerAllergens.setAdapter(adapter);
+    }
+
+    private void setupClickListeners() {
         binding.btnSaveAllergies.setOnClickListener(v -> saveSelectedAllergies());
         binding.btnSkip.setOnClickListener(v -> skipAllergySelection());
     }
 
-    private void setupRecyclerView() {
-        allergenList = new ArrayList<>();
-        selectedAllergens = new ArrayList<>();
-
-        adapter = new AllergenAdapter(allergenList, new AllergenAdapter.OnAllergenClickListener() {
-            @Override
-            public void onAllergenClick(Allergen allergen, boolean isSelected) {
-                if (isSelected) {
-                    if (!selectedAllergens.contains(allergen)) {
-                        selectedAllergens.add(allergen);
-                    }
-                } else {
-                    selectedAllergens.remove(allergen);
-                }
-                updateSaveButton();
-            }
-        });
-
-        binding.recyclerViewAllergens.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerViewAllergens.setAdapter(adapter);
-    }
-
     private void loadAllergens() {
-        setLoadingState(true);
+        showLoading(true);
 
-        // Load all allergens from database
         supabaseClient.getAllergens(new SupabaseClientHelper.AllergenCallback() {
             @Override
             public void onSuccess(List<Allergen> allergens) {
                 runOnUiThread(() -> {
+                    showLoading(false);
                     allergenList.clear();
                     allergenList.addAll(allergens);
-                    adapter.notifyDataSetChanged();
+                    adapter.updateAllergens(allergenList);
 
-                    // Load user's existing allergies to pre-select them
+                    // Load user's existing allergies if any
                     loadUserAllergies();
                 });
             }
@@ -98,10 +83,8 @@ public class AllergySelectionActivity extends AppCompatActivity {
             @Override
             public void onError(String error) {
                 runOnUiThread(() -> {
-                    setLoadingState(false);
-                    Log.e(TAG, "Failed to load allergens: " + error);
-                    Toast.makeText(AllergySelectionActivity.this,
-                        "Failed to load allergens. Please try again.", Toast.LENGTH_LONG).show();
+                    showLoading(false);
+                    showError("Failed to load allergens: " + error);
                 });
             }
         });
@@ -109,57 +92,71 @@ public class AllergySelectionActivity extends AppCompatActivity {
 
     private void loadUserAllergies() {
         String userId = authManager.getCurrentUserId();
-        if (userId == null) {
-            setLoadingState(false);
-            return;
-        }
+        if (userId == null) return;
 
         supabaseClient.getUserAllergies(userId, new SupabaseClientHelper.AllergenCallback() {
             @Override
             public void onSuccess(List<Allergen> userAllergens) {
                 runOnUiThread(() -> {
-                    setLoadingState(false);
-
-                    // Pre-select user's existing allergies
-                    selectedAllergens.clear();
+                    // Mark user's existing allergens as selected
                     for (Allergen userAllergen : userAllergens) {
                         for (Allergen allergen : allergenList) {
                             if (allergen.getId().equals(userAllergen.getId())) {
-                                selectedAllergens.add(allergen);
                                 allergen.setSelected(true);
                                 break;
                             }
                         }
                     }
-
                     adapter.notifyDataSetChanged();
-                    updateSaveButton();
+                    updateSelectedCount();
                 });
             }
 
             @Override
             public void onError(String error) {
-                runOnUiThread(() -> {
-                    setLoadingState(false);
-                    Log.e(TAG, "Failed to load user allergies: " + error);
-                    // Don't show error to user as this is not critical
-                    // User can still select allergies normally
-                });
+                // It's okay if user doesn't have allergies yet
+                runOnUiThread(() -> updateSelectedCount());
             }
         });
+    }
+
+    @Override
+    public void onAllergenClick(Allergen allergen, boolean isSelected) {
+        if (isSelected) {
+            if (!selectedAllergens.contains(allergen)) {
+                selectedAllergens.add(allergen);
+            }
+        } else {
+            selectedAllergens.remove(allergen);
+        }
+        updateSelectedCount();
+    }
+
+    private void updateSelectedCount() {
+        selectedAllergens.clear();
+        for (Allergen allergen : allergenList) {
+            if (allergen.isSelected()) {
+                selectedAllergens.add(allergen);
+            }
+        }
+
+        int count = selectedAllergens.size();
+        String buttonText = count > 0 ?
+                getString(R.string.save_allergies) + " (" + count + ")" :
+                getString(R.string.save_allergies);
+        binding.btnSaveAllergies.setText(buttonText);
+        binding.btnSaveAllergies.setEnabled(true);
     }
 
     private void saveSelectedAllergies() {
         String userId = authManager.getCurrentUserId();
         if (userId == null) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
-            navigateToLogin();
+            showError("User not logged in");
             return;
         }
 
-        setLoadingState(true);
+        showLoading(true);
 
-        // Convert selected allergens to IDs
         List<String> allergenIds = new ArrayList<>();
         for (Allergen allergen : selectedAllergens) {
             allergenIds.add(allergen.getId());
@@ -169,14 +166,8 @@ public class AllergySelectionActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 runOnUiThread(() -> {
-                    setLoadingState(false);
-
-                    // Update local auth manager
-                    authManager.updateAllergiesSelected(true);
-
-                    Toast.makeText(AllergySelectionActivity.this,
-                        "Allergies saved successfully!", Toast.LENGTH_SHORT).show();
-
+                    showLoading(false);
+                    showSuccess(getString(R.string.allergies_saved));
                     navigateToMain();
                 });
             }
@@ -184,10 +175,8 @@ public class AllergySelectionActivity extends AppCompatActivity {
             @Override
             public void onError(String error) {
                 runOnUiThread(() -> {
-                    setLoadingState(false);
-                    Log.e(TAG, "Failed to save allergies: " + error);
-                    Toast.makeText(AllergySelectionActivity.this,
-                        "Failed to save allergies. Please try again.", Toast.LENGTH_LONG).show();
+                    showLoading(false);
+                    showError("Failed to save allergies: " + error);
                 });
             }
         });
@@ -198,29 +187,6 @@ public class AllergySelectionActivity extends AppCompatActivity {
         navigateToMain();
     }
 
-    private void updateSaveButton() {
-        boolean hasSelections = !selectedAllergens.isEmpty();
-        binding.btnSaveAllergies.setEnabled(hasSelections);
-        binding.btnSaveAllergies.setText(hasSelections ?
-            "Save " + selectedAllergens.size() + " Allergies" : "Save Allergies");
-    }
-
-    private void setLoadingState(boolean isLoading) {
-        if (binding.progressBar != null) {
-            binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        }
-
-        binding.btnSaveAllergies.setEnabled(!isLoading && !selectedAllergens.isEmpty());
-        binding.btnSkip.setEnabled(!isLoading);
-        binding.recyclerViewAllergens.setEnabled(!isLoading);
-
-        if (isLoading) {
-            binding.btnSaveAllergies.setText("Saving...");
-        } else {
-            updateSaveButton();
-        }
-    }
-
     private void navigateToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -228,17 +194,18 @@ public class AllergySelectionActivity extends AppCompatActivity {
         finish();
     }
 
-    private void navigateToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+    private void showLoading(boolean show) {
+        binding.progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        binding.btnSaveAllergies.setEnabled(!show);
+        binding.btnSkip.setEnabled(!show);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    private void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void showSuccess(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -247,30 +214,34 @@ public class AllergySelectionActivity extends AppCompatActivity {
         binding = null;
     }
 
-    // Allergen model class
+    // Inner class for Allergen
     public static class Allergen {
         private String id;
         private String name;
         private String description;
-        private boolean isSelected;
+        private boolean selected;
+
+        public Allergen() {}
 
         public Allergen(String id, String name, String description) {
             this.id = id;
             this.name = name;
             this.description = description;
-            this.isSelected = false;
+            this.selected = false;
         }
 
         // Getters and setters
         public String getId() { return id; }
-        public String getName() { return name; }
-        public String getDescription() { return description; }
-        public boolean isSelected() { return isSelected; }
-
         public void setId(String id) { this.id = id; }
+
+        public String getName() { return name; }
         public void setName(String name) { this.name = name; }
+
+        public String getDescription() { return description; }
         public void setDescription(String description) { this.description = description; }
-        public void setSelected(boolean selected) { this.isSelected = selected; }
+
+        public boolean isSelected() { return selected; }
+        public void setSelected(boolean selected) { this.selected = selected; }
 
         @Override
         public boolean equals(Object obj) {

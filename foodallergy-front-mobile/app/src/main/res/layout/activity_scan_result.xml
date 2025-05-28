@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.scanner.ScanResultActivity">
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.FoodAllergyApp.AppBarOverlay">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.FoodAllergyApp.PopupOverlay" />
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Product Information -->
+            <!-- Product Info -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,62 +44,75 @@
                     android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/text_product_name"
+                        android:id="@+id/tv_product_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nom du produit"
+                        android:text="Product Name"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/text_barcode"
+                        android:id="@+id/tv_barcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Code-barres: 1234567890"
+                        android:text="Barcode: 123456789"
                         android:textSize="14sp"
-                        android:textColor="@color/text_secondary" />
+                        android:textColor="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Warning/Safe Message -->
+            <TextView
+                android:id="@+id/tv_warning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:padding="12dp"
+                android:text="Warning message"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_background"
+                android:visibility="gone" />
+
+            <!-- Risk Level -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_risk_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/text_risk_level"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Risque faible"
+                        android:text="Risk Assessment"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:padding="8dp"
-                        android:background="@drawable/bg_risk_level"
-                        android:textColor="@color/success" />
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tv_risk_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Risk Level: LOW"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Warning Section -->
-            <LinearLayout
-                android:id="@+id/layout_warning"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_allergen_warning"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/text_warning"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="⚠️ Ce produit contient des allergènes!"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/error" />
-
-            </LinearLayout>
-
-            <!-- Allergens Section -->
+            <!-- Allergens -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -118,23 +129,23 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Allergènes détectés"
-                        android:textSize="18sp"
+                        android:text="Allergens"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="8dp" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_allergens"
+                    <TextView
+                        android:id="@+id/tv_allergens"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false" />
+                        android:text="No allergens"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Ingredients Section -->
+            <!-- Ingredients -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,52 +162,24 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Ingrédients"
-                        android:textSize="18sp"
+                        android:text="Ingredients"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="8dp" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_ingredients"
+                    <TextView
+                        android:id="@+id/tv_ingredients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false" />
+                        android:text="No ingredients available"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-            <!-- Action Buttons -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_save_to_history"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Sauvegarder"
-                    android:textAllCaps="false" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_share_result"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text="Partager"
-                    android:textAllCaps="false" />
-
-            </LinearLayout>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

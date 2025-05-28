@@ -4,13 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
-
 import ma.emsi.foodallergyapp.R;
+import java.util.List;
 
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
 
@@ -18,11 +15,6 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
     public IngredientListAdapter(List<String> ingredients) {
         this.ingredients = ingredients;
-    }
-
-    public void updateIngredients(List<String> newIngredients) {
-        this.ingredients = newIngredients;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -41,19 +33,24 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
     @Override
     public int getItemCount() {
-        return ingredients != null ? ingredients.size() : 0;
+        return ingredients.size();
+    }
+
+    public void updateIngredients(List<String> newIngredients) {
+        this.ingredients = newIngredients;
+        notifyDataSetChanged();
     }
 
     static class IngredientViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvIngredientName;
+        private TextView textIngredientName;
 
         public IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvIngredientName = itemView.findViewById(R.id.tv_ingredient_name);
+            textIngredientName = itemView.findViewById(R.id.text_ingredient_name);
         }
 
         public void bind(String ingredient) {
-            tvIngredientName.setText(ingredient);
+            textIngredientName.setText(ingredient);
         }
     }
 }

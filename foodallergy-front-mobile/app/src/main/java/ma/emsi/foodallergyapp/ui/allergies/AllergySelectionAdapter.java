@@ -13,62 +13,88 @@ import java.util.List;
 
 import ma.emsi.foodallergyapp.R;
 
-public class AllergySelectionAdapter extends RecyclerView.Adapter<AllergySelectionAdapter.AllergyViewHolder> {
+public class AllergySelectionAdapter extends RecyclerView.Adapter<AllergySelectionAdapter.AllergenViewHolder> {
 
-    private List<AllergySelectionActivity.Allergen> allergyItems;
+    private List<AllergySelectionActivity.Allergen> allergens;
+    private OnAllergenClickListener listener;
 
-    public AllergySelectionAdapter(List<AllergySelectionActivity.Allergen> allergyItems) {
-        this.allergyItems = allergyItems;
+    public interface OnAllergenClickListener {
+        void onAllergenClick(AllergySelectionActivity.Allergen allergen, boolean isSelected);
     }
 
-    public void updateAllergens(List<AllergySelectionActivity.Allergen> newAllergyItems) {
-        this.allergyItems = newAllergyItems;
-        notifyDataSetChanged();
+    public AllergySelectionAdapter(List<AllergySelectionActivity.Allergen> allergens, OnAllergenClickListener listener) {
+        this.allergens = allergens;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-    public AllergyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AllergenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_allergen, parent, false);
-        return new AllergyViewHolder(view);
+                .inflate(R.layout.item_allergen_selection, parent, false);
+        return new AllergenViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AllergyViewHolder holder, int position) {
-        AllergySelectionActivity.Allergen item = allergyItems.get(position);
-        holder.bind(item);
+    public void onBindViewHolder(@NonNull AllergenViewHolder holder, int position) {
+        AllergySelectionActivity.Allergen allergen = allergens.get(position);
+        holder.bind(allergen, listener);
     }
 
     @Override
     public int getItemCount() {
-        return allergyItems != null ? allergyItems.size() : 0;
+        return allergens != null ? allergens.size() : 0;
     }
 
-    static class AllergyViewHolder extends RecyclerView.ViewHolder {
+    public void updateAllergens(List<AllergySelectionActivity.Allergen> newAllergens) {
+        this.allergens = newAllergens;
+        notifyDataSetChanged();
+    }
+
+    static class AllergenViewHolder extends RecyclerView.ViewHolder {
         private TextView tvAllergenName;
         private TextView tvAllergenDescription;
         private CheckBox cbAllergen;
 
-        public AllergyViewHolder(@NonNull View itemView) {
+        public AllergenViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvAllergenName = itemView.findViewById(R.id.tv_allergen_name);
-            tvAllergenDescription = itemView.findViewById(R.id.tv_allergen_description);
-            cbAllergen = itemView.findViewById(R.id.cb_allergen);
+            // Use the correct IDs from the layout
+            tvAllergenName = itemView.findViewById(R.id.text_allergen_name);
+            tvAllergenDescription = itemView.findViewById(R.id.text_allergen_description);
+            cbAllergen = itemView.findViewById(R.id.checkbox_allergen);
         }
 
-        public void bind(AllergySelectionActivity.Allergen item) {
-            tvAllergenName.setText(item.getName());
-            tvAllergenDescription.setText(item.getDescription());
-            cbAllergen.setChecked(item.isSelected());
+        public void bind(AllergySelectionActivity.Allergen allergen, OnAllergenClickListener listener) {
+            if (tvAllergenName != null) {
+                tvAllergenName.setText(allergen.getName());
+            }
 
-            cbAllergen.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                item.setSelected(isChecked);
-            });
+            if (tvAllergenDescription != null) {
+                tvAllergenDescription.setText(allergen.getDescription());
+            }
 
-            itemView.setOnClickListener(v -> {
-                cbAllergen.setChecked(!cbAllergen.isChecked());
-            });
+            if (cbAllergen != null) {
+                cbAllergen.setChecked(allergen.isSelected());
+
+                // Set click listener for the entire item
+                itemView.setOnClickListener(v -> {
+                    boolean newState = !cbAllergen.isChecked();
+                    cbAllergen.setChecked(newState);
+                    allergen.setSelected(newState);
+                    if (listener != null) {
+                        listener.onAllergenClick(allergen, newState);
+                    }
+                });
+
+                // Set click listener for the checkbox
+                cbAllergen.setOnClickListener(v -> {
+                    boolean isChecked = cbAllergen.isChecked();
+                    allergen.setSelected(isChecked);
+                    if (listener != null) {
+                        listener.onAllergenClick(allergen, isChecked);
+                    }
+                });
+            }
         }
     }
 }

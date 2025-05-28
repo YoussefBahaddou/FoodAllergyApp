@@ -4,16 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="@drawable/bg_ingredient_item"
-    android:layout_marginBottom="4dp">
+    android:background="@drawable/bg_ingredient_item">
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_circle"
+        android:layout_marginEnd="12dp"
+        android:layout_gravity="center_vertical"
+        android:tint="@color/text_secondary" />
 
     <TextView
-        android:id="@+id/tv_ingredient_name"
-        android:layout_width="match_parent"
+        android:id="@+id/text_ingredient_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:text="Ingredient Name"
         android:textSize="14sp"
-        android:textColor="@color/text_primary"
-        android:gravity="center_vertical" />
+        android:textColor="@color/text_primary" />
 
 </LinearLayout>

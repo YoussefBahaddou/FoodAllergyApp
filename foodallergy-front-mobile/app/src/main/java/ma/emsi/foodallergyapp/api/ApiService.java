@@ -21,4 +21,7 @@ public interface ApiService {
 
     @POST("api/allergy/scan")
     Call<ScanResult> scanProduct(@Body ScanRequest request);
+
+    @GET("api/products/barcode/{barcode}")
+    Call<ScanResult> getProductByBarcode(@Path("barcode") String barcode);
 }

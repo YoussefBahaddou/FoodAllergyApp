@@ -2,27 +2,16 @@ package ma.emsi.foodallergyapp.ui.scanner;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.google.android.material.appbar.MaterialToolbar;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import androidx.core.content.ContextCompat;
 import ma.emsi.foodallergyapp.R;
 import ma.emsi.foodallergyapp.databinding.ActivityScanResultBinding;
-import ma.emsi.foodallergyapp.models.ScanResult;
+import ma.emsi.foodallergyapp.model.ScanResult;
 
 public class ScanResultActivity extends AppCompatActivity {
 
     private ActivityScanResultBinding binding;
     private ScanResult scanResult;
-    private AllergenListAdapter allergenAdapter;
-    private IngredientListAdapter ingredientAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,127 +19,84 @@ public class ScanResultActivity extends AppCompatActivity {
         binding = ActivityScanResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Get scan result from intent
+        scanResult = (ScanResult) getIntent().getSerializableExtra("scan_result");
+
+        if (scanResult == null) {
+            finish();
+            return;
+        }
+
         setupToolbar();
-        setupRecyclerViews();
-        loadScanResult();
         displayResults();
-        setupClickListeners();
     }
 
     private void setupToolbar() {
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Résultat du scan");
+            getSupportActionBar().setTitle("Scan Results");
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-    }
-
-    private void setupRecyclerViews() {
-        // Setup allergens recycler view
-        allergenAdapter = new AllergenListAdapter(new ArrayList<>());
-        binding.recyclerAllergens.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerAllergens.setAdapter(allergenAdapter);
-
-        // Setup ingredients recycler view
-        ingredientAdapter = new IngredientListAdapter(new ArrayList<>());
-        binding.recyclerIngredients.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerIngredients.setAdapter(ingredientAdapter);
-    }
-
-    private void loadScanResult() {
-        // Get scan result from intent or create mock data
-        String barcode = getIntent().getStringExtra("barcode");
-
-        if (barcode != null) {
-            // In a real app, you would fetch this data from your API
-            scanResult = createMockScanResult(barcode);
-        } else {
-            // Create default mock data for testing
-            scanResult = createMockScanResult("1234567890123");
-        }
-    }
-
-    private ScanResult createMockScanResult(String barcode) {
-        List<String> ingredients = Arrays.asList(
-                "Farine de blé", "Sucre", "Huile de palme", "Cacao en poudre",
-                "Lait en poudre", "Œufs", "Sel", "Levure chimique", "Arôme vanille"
-        );
-
-        List<String> allergens = Arrays.asList("Gluten", "Lait", "Œufs");
-
-        return new ScanResult(
-                "Biscuits au Chocolat",
-                barcode,
-                ingredients,
-                allergens,
-                true, // Has user allergens
-                "HIGH" // Risk level
-        );
     }
 
     private void displayResults() {
-        if (scanResult == null) return;
-
         // Display product name
-        binding.textProductName.setText(scanResult.getProductName());
+        binding.tvProductName.setText(scanResult.getProductName());
+        binding.tvBarcode.setText("Barcode: " + scanResult.getBarcode());
 
-        // Display barcode
-        binding.textBarcode.setText("Code-barres: " + scanResult.getBarcode());
-
-        // Display risk level
-        displayRiskLevel();
-
-        // Update adapters
-        if (scanResult.getAllergens() != null) {
-            allergenAdapter.updateAllergens(scanResult.getAllergens());
-        }
-
-        if (scanResult.getIngredients() != null) {
-            ingredientAdapter.updateIngredients(scanResult.getIngredients());
-        }
-
-        // Show/hide warning
-        if (scanResult.isHasUserAllergens()) {
-            binding.layoutWarning.setVisibility(View.VISIBLE);
-            binding.textWarning.setText("⚠️ Ce produit contient des allergènes qui vous concernent!");
-        } else {
-            binding.layoutWarning.setVisibility(View.GONE);
-        }
-    }
-
-    private void displayRiskLevel() {
+        // Display risk level with appropriate color
         String riskLevel = scanResult.getRiskLevel();
-        if (riskLevel == null) riskLevel = "LOW";
+        binding.tvRiskLevel.setText("Risk Level: " + riskLevel);
 
         switch (riskLevel) {
             case "HIGH":
-                binding.textRiskLevel.setText("Risque élevé");
-                binding.textRiskLevel.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                binding.tvRiskLevel.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+                binding.cardRiskLevel.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
                 break;
             case "MEDIUM":
-                binding.textRiskLevel.setText("Risque modéré");
-                binding.textRiskLevel.setTextColor(getResources().getColor(android.R.color.holo_orange_dark));
+                binding.tvRiskLevel.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark));
+                binding.cardRiskLevel.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_orange_light));
                 break;
             case "LOW":
-            default:
-                binding.textRiskLevel.setText("Risque faible");
-                binding.textRiskLevel.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+                binding.tvRiskLevel.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
+                binding.cardRiskLevel.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_green_light));
                 break;
+        }
+
+        // Display allergens
+        if (scanResult.getAllergens() != null && !scanResult.getAllergens().isEmpty()) {
+            binding.tvAllergens.setText("Allergens: " + String.join(", ", scanResult.getAllergens()));
+            binding.tvAllergens.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvAllergens.setText("No known allergens");
+            binding.tvAllergens.setVisibility(View.VISIBLE);
+        }
+
+        // Display ingredients
+        if (scanResult.getIngredients() != null && !scanResult.getIngredients().isEmpty()) {
+            binding.tvIngredients.setText("Ingredients: " + String.join(", ", scanResult.getIngredients()));
+            binding.tvIngredients.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvIngredients.setText("Ingredients not available");
+            binding.tvIngredients.setVisibility(View.VISIBLE);
+        }
+
+        // Show warning if user has allergens in this product
+        if (scanResult.isHasUserAllergens()) {
+            binding.tvWarning.setText("⚠️ WARNING: This product contains allergens you're sensitive to!");
+            binding.tvWarning.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+            binding.tvWarning.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvWarning.setText("✅ This product appears safe for you");
+            binding.tvWarning.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
+            binding.tvWarning.setVisibility(View.VISIBLE);
         }
     }
 
-    private void setupClickListeners() {
-        binding.btnSaveToHistory.setOnClickListener(v -> {
-            // TODO: Save to history database
-            Toast.makeText(this, "Résultat sauvegardé dans l'historique", Toast.LENGTH_SHORT).show();
-        });
-
-        binding.btnShareResult.setOnClickListener(v -> {
-            // TODO: Implement sharing functionality
-            Toast.makeText(this, "Fonctionnalité de partage à venir", Toast.LENGTH_SHORT).show();
-        });
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

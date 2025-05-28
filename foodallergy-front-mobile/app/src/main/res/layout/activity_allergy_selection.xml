@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/Theme.FoodAllergyApp.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -20,88 +20,113 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Header Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:background="?attr/colorSurface">
+            android:padding="16dp">
 
+            <!-- Header Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_allergies"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/select_allergies"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Sélectionnez vos allergies pour recevoir des alertes personnalisées"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Allergens List -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Your Allergies"
-                android:textSize="24sp"
+                android:text="Allergènes disponibles"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:gravity="center" />
+                android:layout_marginBottom="12dp" />
 
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_allergens"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Choose the allergens you want to avoid. This will help us scan products for your safety."
-                android:textSize="14sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:gravity="center" />
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_allergies"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="@string/save_allergies"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="12dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_skip"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Passer cette étape"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Progress Bar -->
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:visibility="gone" />
+    </androidx.core.widget.NestedScrollView>
 
-        <!-- Allergens List -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_allergens"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:clipToPadding="false"
-            tools:listitem="@layout/item_allergen" />
-
-        <!-- Bottom Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:background="?attr/colorSurface"
-            android:elevation="4dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_skip"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="Skip for Now"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_save_allergies"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="Save Allergies"
-                android:enabled="false" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -20,16 +20,11 @@ public class AllergenListAdapter extends RecyclerView.Adapter<AllergenListAdapte
         this.allergens = allergens;
     }
 
-    public void updateAllergens(List<String> newAllergens) {
-        this.allergens = newAllergens;
-        notifyDataSetChanged();
-    }
-
     @NonNull
     @Override
     public AllergenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_allergen_simple, parent, false);
+                .inflate(R.layout.item_allergen, parent, false);
         return new AllergenViewHolder(view);
     }
 
@@ -41,19 +36,24 @@ public class AllergenListAdapter extends RecyclerView.Adapter<AllergenListAdapte
 
     @Override
     public int getItemCount() {
-        return allergens != null ? allergens.size() : 0;
+        return allergens.size();
+    }
+
+    public void updateAllergens(List<String> newAllergens) {
+        this.allergens = newAllergens;
+        notifyDataSetChanged();
     }
 
     static class AllergenViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvAllergenName;
+        private TextView textAllergenName;
 
         public AllergenViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvAllergenName = itemView.findViewById(R.id.tv_allergen_name);
+            textAllergenName = itemView.findViewById(R.id.text_allergen_name);
         }
 
         public void bind(String allergen) {
-            tvAllergenName.setText(allergen);
+            textAllergenName.setText(allergen);
         }
     }
 }

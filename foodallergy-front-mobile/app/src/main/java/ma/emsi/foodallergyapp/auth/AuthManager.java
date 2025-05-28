@@ -15,9 +15,20 @@ public class AuthManager {
     private SharedPreferences prefs;
     private SupabaseClientHelper supabaseClient;
 
+    // Add static instance for singleton pattern
+    private static AuthManager instance;
+
     public AuthManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         supabaseClient = SupabaseClientHelper.getInstance();
+    }
+
+    // Add getInstance method for singleton pattern
+    public static synchronized AuthManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new AuthManager(context.getApplicationContext());
+        }
+        return instance;
     }
 
     // Callback interfaces
