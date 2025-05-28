@@ -1,97 +1,179 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Food Allergy App</string>
-    <string name="app_logo">Logo de l\'application</string>
-
-    <!-- Navigation drawer menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Food Allergy App</string>
-    <string name="nav_header_subtitle">Votre assistant allergies</string>
+    <string name="nav_header_subtitle">Stay Safe, Eat Smart</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Paramètres</string>
+    <string name="action_settings">Settings</string>
 
     <!-- Menu items -->
-    <string name="menu_home">Accueil</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
     <string name="menu_scanner">Scanner</string>
-    <string name="menu_allergies">Mes Allergies</string>
-    <string name="menu_history">Historique</string>
-    <string name="menu_logout">Déconnexion</string>
+    <string name="menu_history">History</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_allergies">My Allergies</string>
+    <string name="menu_manage_allergies">Manage Allergies</string>
+    <string name="menu_logout">Logout</string>
 
-    <!-- Home screen -->
-    <string name="home_welcome">Bienvenue</string>
-    <string name="home_description">Votre assistant personnel pour détecter les allergènes dans vos aliments</string>
+    <!-- Navigation titles -->
+    <string name="title_home">Home</string>
+    <string name="title_scanner">Scanner</string>
+    <string name="title_allergies">Allergies</string>
+    <string name="title_profile">Profile</string>
 
-    <!-- Scanner screen -->
-    <string name="scanner_title">Scanner de produits</string>
-    <string name="scanner_description">Utilisez cette section pour scanner les codes-barres ou rechercher des produits par nom.</string>
-    <string name="scanner_instructions">Pointez votre caméra vers le code-barres du produit</string>
+    <!-- Actions -->
+    <string name="action_logout">Logout</string>
 
-    <!-- Allergies screen -->
-    <string name="allergies_title">Mes Allergies</string>
-    <string name="allergies_description">Configurez vos allergies alimentaires pour recevoir des alertes personnalisées lors du scan de produits.</string>
-    <string name="allergy_selection_title">Sélection des allergies</string>
-    <string name="allergy_selection_description">Sélectionnez vos allergies alimentaires</string>
+    <!-- Authentication -->
+    <string name="login_title">Welcome Back</string>
+    <string name="signup_title">Create Account</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="name_hint">Full Name</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_signup">Sign Up</string>
+    <string name="btn_logout">Logout</string>
+    <string name="link_signup">Don\'t have an account? Sign up</string>
+    <string name="link_login">Already have an account? Login</string>
 
-    <!-- History screen -->
-    <string name="history_title">Historique des scans</string>
-    <string name="history_description">Consultez l\'historique de tous vos scans de produits et les résultats d\'analyse des allergènes.</string>
-    <string name="no_history">Aucun historique disponible</string>
-    <string name="no_history_description">Commencez par scanner des produits pour voir votre historique ici.</string>
+    <!-- Scanner -->
+    <string name="scanner_title">Food Scanner</string>
+    <string name="scanner_description">Scan product barcodes or enter ingredients manually to check for allergens</string>
+    <string name="scanner_instructions">Point your camera at a product barcode or enter ingredients manually</string>
+    <string name="btn_scan_product">Scan Product</string>
+    <string name="btn_manual_entry">Manual Entry</string>
+    <string name="btn_camera_scan">Camera Scan</string>
 
-    <!-- Buttons -->
-    <string name="btn_scan_product">Scanner un produit</string>
-    <string name="btn_manage_allergies">Gérer mes allergies</string>
-    <string name="btn_view_history">Voir l\'historique</string>
-    <string name="save">Enregistrer</string>
-    <string name="cancel">Annuler</string>
-    <string name="delete">Supprimer</string>
-    <string name="edit">Modifier</string>
+    <!-- Scanner Features -->
+    <string name="scanner_features_title">Scanner Features</string>
+    <string name="feature_realtime_scanning">Real-time Barcode Scanning</string>
+    <string name="feature_realtime_scanning_desc">Instantly scan product barcodes with your camera</string>
+    <string name="feature_manual_entry">Manual Ingredient Entry</string>
+    <string name="feature_manual_entry_desc">Type ingredients manually for custom analysis</string>
+    <string name="feature_instant_alerts">Instant Safety Alerts</string>
+    <string name="feature_instant_alerts_desc">Get immediate warnings about allergens</string>
 
-    <!-- Login/Signup -->
-    <string name="login_title">Connexion</string>
-    <string name="login_subtitle">Connectez-vous à votre compte</string>
-    <string name="login_button">Se connecter</string>
-    <string name="signup_title">Inscription</string>
-    <string name="signup_subtitle">Créez votre compte</string>
-    <string name="signup_button">S\'inscrire</string>
+    <!-- Scanner Activity Strings -->
+    <string name="please_enter_barcode">Please enter a barcode</string>
+    <string name="product_found_for_barcode">Product found for barcode: %s</string>
+    <string name="camera_not_initialized">Camera not initialized</string>
+    <string name="flash_on">Flash On</string>
+    <string name="flash_off">Flash Off</string>
+    <string name="flash_turned_on">Flash turned on</string>
+    <string name="flash_turned_off">Flash turned off</string>
+    <string name="camera_preview_placeholder">Camera preview placeholder</string>
+    <string name="camera_not_implemented">Camera scanning not yet implemented</string>
 
-    <!-- Form fields -->
-    <string name="email">Email</string>
-    <string name="password">Mot de passe</string>
-    <string name="username">Nom d\'utilisateur</string>
-    <string name="confirm_password">Confirmer le mot de passe</string>
+    <!-- Scanner Fragment Strings (MISSING STRING ADDED HERE) -->
+    <string name="scan_history_coming_soon">Scan history feature coming soon!</string>
 
-    <!-- Links -->
-    <string name="forgot_password">Mot de passe oublié ?</string>
-    <string name="no_account">Pas de compte ?</string>
-    <string name="register_now">S\'inscrire</string>
-    <string name="have_account">Déjà un compte ?</string>
-    <string name="login_now">Se connecter</string>
+    <!-- History -->
+    <string name="history_title">Scan History</string>
+    <string name="history_description">View your previous scans and results</string>
+    <string name="no_history_title">No Scan History</string>
+    <string name="no_history_description">Start scanning products to see your history here</string>
+    <string name="btn_history">View History</string>
 
-    <!-- Logout dialog -->
-    <string name="logout_title">Déconnexion</string>
-    <string name="logout_message">Êtes-vous sûr de vouloir vous déconnecter ?</string>
-    <string name="logout_yes">Oui</string>
-    <string name="logout_no">Non</string>
+    <!-- Allergies -->
+    <string name="allergies_title">My Allergies</string>
+    <string name="allergies_description">Manage your allergy preferences</string>
+    <string name="btn_allergies">Manage Allergies</string>
+    <string name="btn_manage_allergies">Manage Allergies</string>
+    <string name="btn_save_allergies">Save Allergies</string>
+    <string name="btn_skip_allergies">Skip for Now</string>
+    <string name="allergies_selection_title">Select Your Allergies</string>
+    <string name="allergies_selection_description">Choose the allergens you want to avoid</string>
 
-    <!-- Error messages -->
-    <string name="error_empty_fields">Ce champ est requis</string>
-    <string name="error_invalid_email">Email invalide</string>
-    <string name="error_password_length">Le mot de passe doit contenir au moins 6 caractères</string>
-    <string name="error_passwords_not_match">Les mots de passe ne correspondent pas</string>
-    <string name="error_auth_failed">Échec de l\'authentification</string>
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_name">Name</string>
+    <string name="profile_email">Email</string>
+    <string name="btn_save_profile">Save Profile</string>
+    <string name="btn_edit_profile">Edit Profile</string>
 
-    <!-- Allergens -->
-    <string name="allergen_peanuts">Arachides</string>
-    <string name="allergen_milk">Lait</string>
-    <string name="allergen_gluten">Gluten</string>
-    <string name="allergen_nuts">Fruits à coque</string>
-    <string name="allergen_seafood">Fruits de mer</string>
-    <string name="allergen_eggs">Œufs</string>
-    <string name="allergen_soy">Soja</string>
-    <string name="allergen_sesame">Sésame</string>
+    <!-- Product Safety -->
+    <string name="product_safe">Safe to Consume</string>
+    <string name="product_warning">Contains Allergens</string>
+    <string name="product_danger">Dangerous - Avoid</string>
+    <string name="product_unknown">Unknown Safety</string>
 
-    <!-- Placeholder -->
-    <string name="ic_logo_placeholder">Logo placeholder</string>
+    <!-- General -->
+    <string name="loading">Loading...</string>
+    <string name="error_general">Something went wrong. Please try again.</string>
+    <string name="error_network">Network error. Please check your connection.</string>
+    <string name="success_saved">Saved successfully</string>
+    <string name="btn_retry">Retry</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_skip">Skip</string>
+    <string name="btn_done">Done</string>
+
+    <!-- Validation Messages -->
+    <string name="error_email_required">Email is required</string>
+    <string name="error_email_invalid">Please enter a valid email</string>
+    <string name="error_password_required">Password is required</string>
+    <string name="error_password_short">Password must be at least 6 characters</string>
+    <string name="error_name_required">Name is required</string>
+    <string name="error_name_short">Name must be at least 2 characters</string>
+    <string name="error_passwords_mismatch">Passwords do not match</string>
+    <string name="error_confirm_password_required">Please confirm your password</string>
+
+    <!-- Success Messages -->
+    <string name="success_login">Welcome back!</string>
+    <string name="success_signup">Account created successfully!</string>
+    <string name="success_logout">Logged out successfully</string>
+    <string name="success_profile_updated">Profile updated successfully</string>
+    <string name="success_allergies_saved">Allergies saved successfully</string>
+
+    <!-- Error Messages -->
+    <string name="error_login_failed">Login failed. Please check your credentials.</string>
+    <string name="error_signup_failed">Account creation failed. Please try again.</string>
+    <string name="error_profile_update_failed">Failed to update profile. Please try again.</string>
+    <string name="error_allergies_save_failed">Failed to save allergies. Please try again.</string>
+    <string name="error_user_not_found">User not found</string>
+    <string name="error_email_exists">Email already exists</string>
+
+    <!-- Camera and Permissions -->
+    <string name="camera_permission_required">Camera permission is required for scanning</string>
+    <string name="camera_permission_denied">Camera permission denied</string>
+    <string name="btn_grant_permission">Grant Permission</string>
+    <string name="btn_open_settings">Open Settings</string>
+
+    <!-- Scanning Results -->
+    <string name="scan_result_safe">✓ Safe for you</string>
+    <string name="scan_result_warning">⚠ Contains allergens</string>
+    <string name="scan_result_danger">✗ Dangerous - Avoid</string>
+    <string name="detected_allergens">Detected allergens:</string>
+    <string name="no_allergens_detected">No allergens detected</string>
+    <string name="product_not_found">Product not found in database</string>
+    <string name="scan_another">Scan Another Product</string>
+
+    <!-- Manual Entry -->
+    <string name="manual_entry_title">Manual Ingredient Entry</string>
+    <string name="manual_entry_hint">Enter ingredients separated by commas</string>
+    <string name="btn_analyze_ingredients">Analyze Ingredients</string>
+    <string name="ingredients_label">Ingredients:</string>
+
+    <!-- Empty States -->
+    <string name="empty_state_title">Nothing here yet</string>
+    <string name="empty_state_description">Start using the app to see content here</string>
+    <string name="empty_allergies_title">No allergies selected</string>
+    <string name="empty_allergies_description">Add your allergies to get personalized safety alerts</string>
+
+    <!-- Accessibility -->
+    <string name="content_description_logo">App logo</string>
+    <string name="content_description_scan_button">Scan product button</string>
+    <string name="content_description_camera_preview">Camera preview for scanning</string>
+    <string name="content_description_product_image">Product image</string>
+    <string name="content_description_safety_icon">Product safety status icon</string>
+    <string name="content_description_allergen_checkbox">Allergen selection checkbox</string>
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
@@ -17,13 +16,12 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/img_product"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/icon_status"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/bg_image_placeholder"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/ic_logo_placeholder" />
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/success" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -36,28 +34,28 @@
                 android:id="@+id/text_product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Product Name"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="Produit Example" />
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_scan_date"
+                android:id="@+id/text_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:text="Scan Result"
                 android:textColor="@color/text_secondary"
-                android:textSize="12sp"
-                tools:text="Scanné le 28 mai 2025" />
+                android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/text_allergen_status"
+                android:id="@+id/text_timestamp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textSize="14sp"
-                tools:text="Contient des allergènes"
-                tools:textColor="@color/error" />
+                android:text="Timestamp"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

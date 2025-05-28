@@ -11,9 +11,9 @@
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_camera"
-            android:title="@string/menu_scanner" />
+            android:title="@string/menu_gallery" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_allergies"
             android:icon="@drawable/ic_allergies"
             android:title="@string/menu_allergies" />
         <item
@@ -22,8 +22,12 @@
             android:title="@string/menu_history" />
     </group>
 
-    <item android:title="@string/action_settings">
+    <item android:title="Compte">
         <menu>
+            <item
+                android:id="@+id/nav_manage_allergies"
+                android:icon="@drawable/ic_edit"
+                android:title="@string/menu_manage_allergies" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_logout"

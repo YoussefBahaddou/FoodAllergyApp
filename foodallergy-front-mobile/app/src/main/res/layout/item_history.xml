@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp">
 
@@ -15,38 +17,40 @@
 
         <ImageView
             android:id="@+id/icon_status"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_check_circle" />
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/success" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text_product_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nom du produit"
+                android:text="Product Name"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/text_result"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Résultat de l'analyse"
+                android:text="Scan Result"
+                android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/text_timestamp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Timestamp"
@@ -54,6 +58,13 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_arrow_forward"
+            app:tint="@color/text_secondary" />
 
     </LinearLayout>
 

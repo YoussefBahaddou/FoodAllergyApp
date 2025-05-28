@@ -5,25 +5,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
-
 import ma.emsi.foodallergyapp.R;
+import java.util.List;
 
 public class AllergenAdapter extends RecyclerView.Adapter<AllergenAdapter.AllergenViewHolder> {
 
     private List<AllergySelectionActivity.Allergen> allergens;
+    private OnAllergenClickListener listener;
 
-    public AllergenAdapter(List<AllergySelectionActivity.Allergen> allergens) {
-        this.allergens = allergens;
+    public interface OnAllergenClickListener {
+        void onAllergenClick(AllergySelectionActivity.Allergen allergen, boolean isSelected);
     }
 
-    public void updateAllergens(List<AllergySelectionActivity.Allergen> newAllergens) {
-        this.allergens = newAllergens;
-        notifyDataSetChanged();
+    public AllergenAdapter(List<AllergySelectionActivity.Allergen> allergens, OnAllergenClickListener listener) {
+        this.allergens = allergens;
+        this.listener = listener;
     }
 
     @NonNull
@@ -42,10 +40,10 @@ public class AllergenAdapter extends RecyclerView.Adapter<AllergenAdapter.Allerg
 
     @Override
     public int getItemCount() {
-        return allergens != null ? allergens.size() : 0;
+        return allergens.size();
     }
 
-    static class AllergenViewHolder extends RecyclerView.ViewHolder {
+    class AllergenViewHolder extends RecyclerView.ViewHolder {
         private TextView tvAllergenName;
         private TextView tvAllergenDescription;
         private CheckBox cbAllergen;
@@ -62,12 +60,23 @@ public class AllergenAdapter extends RecyclerView.Adapter<AllergenAdapter.Allerg
             tvAllergenDescription.setText(allergen.getDescription());
             cbAllergen.setChecked(allergen.isSelected());
 
+            // Handle checkbox clicks
+            cbAllergen.setOnCheckedChangeListener(null); // Clear previous listener
             cbAllergen.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 allergen.setSelected(isChecked);
+                if (listener != null) {
+                    listener.onAllergenClick(allergen, isChecked);
+                }
             });
 
+            // Handle item clicks
             itemView.setOnClickListener(v -> {
-                cbAllergen.setChecked(!cbAllergen.isChecked());
+                boolean newState = !allergen.isSelected();
+                allergen.setSelected(newState);
+                cbAllergen.setChecked(newState);
+                if (listener != null) {
+                    listener.onAllergenClick(allergen, newState);
+                }
             });
         }
     }

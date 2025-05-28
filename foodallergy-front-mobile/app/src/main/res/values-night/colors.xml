@@ -1,10 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Dark theme specific colors -->
-    <color name="text_primary">#FFFFFFFF</color>
-    <color name="text_secondary">#FFBDBDBD</color>
-    <color name="background">#FF121212</color>
-    <color name="surface">#FF1E1E1E</color>
-    <color name="border_light">#FF424242</color>
-    <color name="border_medium">#FF616161</color>
+    <!-- Primary Colors for Dark Theme -->
+    <color name="primary">#BB86FC</color>
+    <color name="primary_dark">#3700B3</color>
+    <color name="primary_light">#CF6679</color>
+    <color name="primary_variant">#3700B3</color>
+
+    <!-- Secondary Colors for Dark Theme -->
+    <color name="secondary">#03DAC6</color>
+    <color name="secondary_variant">#018786</color>
+    <color name="secondary_light">#03DAC6</color>
+
+    <!-- Surface Colors for Dark Theme -->
+    <color name="on_primary">#000000</color>
+    <color name="on_secondary">#000000</color>
+    <color name="on_surface">#FFFFFF</color>
+    <color name="on_background">#FFFFFF</color>
+    <color name="on_error">#000000</color>
+
+    <!-- Background Colors for Dark Theme -->
+    <color name="background">#121212</color>
+    <color name="background_light">#1E1E1E</color>
+    <color name="surface">#121212</color>
+
+    <!-- Text Colors for Dark Theme -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3B3B3</color>
+
+    <!-- Status Colors (same for dark theme) -->
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FF9800</color>
+    <color name="error">#CF6679</color>
+
+    <!-- Border Colors for Dark Theme -->
+    <color name="border_light">#333333</color>
+
+    <!-- Basic Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Material Design Colors -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
 </resources>

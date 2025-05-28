@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@drawable/bg_ingredient_item"
+    android:layout_marginBottom="4dp">
 
     <TextView
         android:id="@+id/tv_ingredient_name"
@@ -12,6 +14,6 @@
         android:text="Ingredient Name"
         android:textSize="14sp"
         android:textColor="@color/text_primary"
-        android:padding="4dp" />
+        android:gravity="center_vertical" />
 
 </LinearLayout>

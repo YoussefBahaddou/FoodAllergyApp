@@ -3,29 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/navigation_home">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/navigation_home"
         android:name="ma.emsi.foodallergyapp.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="ma.emsi.foodallergyapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_scanner"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/navigation_scanner"
+        android:name="ma.emsi.foodallergyapp.ui.scanner.ScannerFragment"
+        android:label="@string/title_scanner"
+        tools:layout="@layout/fragment_scanner" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="ma.emsi.foodallergyapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_allergies"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/navigation_allergies"
+        android:name="ma.emsi.foodallergyapp.ui.allergies.AllergiesFragment"
+        android:label="@string/title_allergies"
+        tools:layout="@layout/fragment_allergies" />
 
     <fragment
-        android:id="@+id/nav_history"
-        android:name="ma.emsi.foodallergyapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_history"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/navigation_profile"
+        android:name="ma.emsi.foodallergyapp.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>
