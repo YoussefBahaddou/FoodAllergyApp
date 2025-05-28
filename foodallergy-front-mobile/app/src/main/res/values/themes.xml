@@ -3,23 +3,21 @@
     <style name="Theme.FoodAllergyApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/accent</item>
-        <item name="colorSecondaryVariant">@color/accent</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/primary_dark</item>
-        <!-- Text colors -->
-        <item name="android:textColorPrimary">@color/primary_text</item>
-        <item name="android:textColorSecondary">@color/text_secondary</item>
-        <!-- Background colors -->
-        <item name="android:colorBackground">@color/background_light</item>
-        <!-- Button styling -->
-        <item name="materialButtonStyle">@style/Widget.App.Button</item>
-        <!-- Text input styling -->
-        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/on_error</item>
     </style>
 
     <style name="Theme.FoodAllergyApp.NoActionBar">

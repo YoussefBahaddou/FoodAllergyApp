@@ -10,6 +10,7 @@ public class AuthManager {
     private static final String KEY_TOKEN = "auth_token";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_EMAIL = "email";
+    private static final String KEY_ALLERGIES_SELECTED = "allergies_selected";
 
     private static AuthManager instance;
     private final SharedPreferences prefs;
@@ -119,6 +120,7 @@ public class AuthManager {
         editor.remove(KEY_TOKEN);
         editor.remove(KEY_USER_ID);
         editor.remove(KEY_EMAIL);
+        editor.remove(KEY_ALLERGIES_SELECTED);
         editor.apply();
         Log.d(TAG, "User session cleared");
     }
@@ -133,5 +135,15 @@ public class AuthManager {
 
     public String getEmail() {
         return prefs.getString(KEY_EMAIL, "");
+    }
+
+    public void setAllergiesSelected(boolean selected) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(KEY_ALLERGIES_SELECTED, selected);
+        editor.apply();
+    }
+
+    public boolean areAllergiesSelected() {
+        return prefs.getBoolean(KEY_ALLERGIES_SELECTED, false);
     }
 }

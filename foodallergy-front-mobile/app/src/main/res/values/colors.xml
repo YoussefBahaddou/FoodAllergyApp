@@ -1,28 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application colors -->
-    <color name="primary">#4CAF50</color>
-    <color name="primary_dark">#388E3C</color>
-    <color name="primary_light">#C8E6C9</color>
-    <color name="accent">#FF5722</color>
-    <color name="primary_text">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="divider">#BDBDBD</color>
-    <color name="error">#F44336</color>
-    <color name="success">#4CAF50</color>
-    <color name="warning">#FFC107</color>
-    <color name="info">#2196F3</color>
-    
-    <!-- Legacy colors (maintained for compatibility) -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Material Design default colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    
-    <!-- Background colors -->
-    <color name="background_light">#FAFAFA</color>
-    <color name="background_dark">#303030</color>
+
+    <!-- Primary colors -->
+    <color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="primary_variant">#1976D2</color>
+
+    <!-- Secondary colors -->
+    <color name="secondary">#03DAC6</color>
+    <color name="secondary_variant">#018786</color>
+
+    <!-- Surface colors -->
+    <color name="surface">#FFFFFF</color>
+    <color name="background">#FAFAFA</color>
+    <color name="background_light">#FFF8F8F8</color>
+    <color name="error">#B00020</color>
+
+    <!-- On colors -->
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#000000</color>
+    <color name="on_surface">#000000</color>
+    <color name="on_background">#000000</color>
+    <color name="on_error">#FFFFFF</color>
+
+    <!-- Text colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+
+    <!-- Border colors -->
+    <color name="border_light">#E0E0E0</color>
+    <color name="border_dark">#BDBDBD</color>
+
+    <!-- Status colors -->
+    <color name="warning">#FFFF9800</color>
+    <color name="success">#FF4CAF50</color>
+    <color name="safe_green">#4CAF50</color>
+    <color name="safe_light">#E8F5E8</color>
+
+
+    <!-- Allergen warning colors -->
+    <color name="allergen_warning_bg">#FFEBEE</color>
+    <color name="allergen_warning_border">#F44336</color>
+    <!-- Divider -->
+    <color name="divider">#1F000000</color>
 </resources>

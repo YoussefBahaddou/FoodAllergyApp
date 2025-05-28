@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "ma.emsi.foodallergyapp"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "ma.emsi.foodallergyapp"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    // Core Android dependencies
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -42,6 +43,18 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+
+    // RecyclerView
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    // CardView
+    implementation("androidx.cardview:cardview:1.0.0")
+
+    // Coordinator Layout
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+
+    // Drawer Layout
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
 
     // Supabase - using direct dependencies to ensure correct versions
     implementation("io.github.jan-tennert.supabase:supabase-kt:2.0.0")
@@ -54,18 +67,48 @@ dependencies {
     implementation("io.ktor:ktor-client-android:2.3.0")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
-    
+    implementation("io.ktor:ktor-client-logging:2.3.0")
+
     // Kotlin coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    
+
     // Network dependencies
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
     implementation(libs.okio)
 
+    // JSON parsing
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // Image loading (for future product images)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
+    // Barcode scanning (ZXing)
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("com.google.zxing:core:3.5.2")
+
+    // Camera permissions and features
+    implementation("androidx.camera:camera-core:1.3.1")
+    implementation("androidx.camera:camera-camera2:1.3.1")
+    implementation("androidx.camera:camera-lifecycle:1.3.1")
+    implementation("androidx.camera:camera-view:1.3.1")
+
+    // Permissions handling
+    implementation("com.karumi:dexter:6.2.3")
+
+    // Shared Preferences (already included in Android SDK but for clarity)
+    // implementation("androidx.preference:preference:1.2.1")
+
+    // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Additional testing
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

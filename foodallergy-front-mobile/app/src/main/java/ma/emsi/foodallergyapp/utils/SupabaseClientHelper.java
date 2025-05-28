@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 public class SupabaseClientHelper {
@@ -18,6 +19,11 @@ public class SupabaseClientHelper {
     private static String supabaseUrl = DEFAULT_URL;
     private static String supabaseKey = DEFAULT_KEY;
     private static SupabaseClientHelper instance;
+
+    public interface SupabaseCallback {
+        void onSuccess(String response);
+        void onError(Exception error);
+    }
 
     public static SupabaseClientHelper getInstance(Context context) {
         if (instance == null) {
@@ -64,6 +70,35 @@ public class SupabaseClientHelper {
                 }
             }
         }
+    }
+
+    public void getAllergens(SupabaseCallback callback) {
+        // Mock implementation - simulate API call
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000); // Simulate network delay
+                android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+                mainHandler.post(() -> callback.onSuccess("[]")); // Empty JSON array
+            } catch (InterruptedException e) {
+                android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+                mainHandler.post(() -> callback.onError(e));
+            }
+        }).start();
+    }
+
+    public void saveUserAllergies(String userId, List<String> allergenIds, SupabaseCallback callback) {
+        // Mock implementation - simulate API call
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000); // Simulate network delay
+                Log.d(TAG, "Saving allergies for user: " + userId + ", allergies: " + allergenIds.toString());
+                android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+                mainHandler.post(() -> callback.onSuccess("success"));
+            } catch (InterruptedException e) {
+                android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+                mainHandler.post(() -> callback.onError(e));
+            }
+        }).start();
     }
 
     // Method to get current URL

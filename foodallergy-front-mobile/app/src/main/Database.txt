@@ -1,0 +1,103 @@
+-- Enable pgcrypto extension for UUID generation
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- ========================
+-- 1. USERS TABLE
+-- ========================
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL, -- Store hashed password
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    allergies_selected BOOLEAN DEFAULT FALSE
+);
+
+-- ========================
+-- 2. ALLERGENS TABLE
+-- ========================
+CREATE TABLE allergens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    keywords TEXT[] -- Array of keywords to match against ingredients
+);
+
+-- ========================
+-- 3. USER_ALLERGENS TABLE (Many-to-Many)
+-- ========================
+CREATE TABLE user_allergens (
+    user_id UUID NOT NULL,
+    allergen_id UUID NOT NULL,
+    selected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, allergen_id),
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (allergen_id) REFERENCES allergens(id) ON DELETE CASCADE
+);
+
+-- ========================
+-- 4. PRODUCTS TABLE
+-- ========================
+CREATE TABLE products (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    barcode TEXT UNIQUE,
+    brand TEXT,
+    ingredients TEXT NOT NULL,
+    allergen_info TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================
+-- 5. SCAN_HISTORY TABLE
+-- ========================
+CREATE TABLE scan_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    product_id UUID,
+    scan_type TEXT NOT NULL, -- 'barcode', 'name', 'ingredients'
+    scan_input TEXT NOT NULL,
+    is_safe BOOLEAN NOT NULL,
+    detected_allergens TEXT[],
+    scanned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+);
+
+-- ========================
+-- 6. INDEXES FOR PERFORMANCE
+-- ========================
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_user_allergens_user_id ON user_allergens(user_id);
+CREATE INDEX idx_user_allergens_allergen_id ON user_allergens(allergen_id);
+CREATE INDEX idx_products_barcode ON products(barcode);
+CREATE INDEX idx_products_name ON products(name);
+CREATE INDEX idx_scan_history_user_id ON scan_history(user_id);
+
+-- ========================
+-- 7. SAMPLE DATA
+-- ========================
+
+-- Insert updated allergens with keywords
+INSERT INTO allergens (id, name, description, keywords)
+VALUES
+  ('aaaa1111-0000-0000-0000-000000000001', 'Arachides', 'Arachides et produits dérivés', ARRAY['arachide', 'cacahuète', 'peanut', 'amlou']),
+  ('aaaa1111-0000-0000-0000-000000000002', 'Lait', 'Lait et produits laitiers', ARRAY['lait', 'milk', 'lactose', 'fromage', 'beurre', 'crème', 'yaourt']),
+  ('aaaa1111-0000-0000-0000-000000000003', 'Gluten', 'Céréales contenant du gluten', ARRAY['gluten', 'blé', 'orge', 'seigle', 'avoine', 'wheat', 'barley']),
+  ('aaaa1111-0000-0000-0000-000000000004', 'Fruits à coque', 'Amandes, noix, noisettes...', ARRAY['amande', 'noix', 'noisette', 'pistache', 'almond', 'walnut', 'hazelnut']),
+  ('aaaa1111-0000-0000-0000-000000000005', 'Fruits de mer', 'Poissons, crustacés, mollusques', ARRAY['poisson', 'crevette', 'crabe', 'moule', 'fish', 'shrimp', 'seafood']),
+  ('aaaa1111-0000-0000-0000-000000000006', 'Œufs', 'Œufs et produits à base d\œufs', ARRAY['œuf', 'egg', 'oeuf', 'albumine']),
+  ('aaaa1111-0000-0000-0000-000000000007', 'Soja', 'Soja et produits dérivés', ARRAY['soja', 'soy', 'tofu', 'miso']),
+  ('aaaa1111-0000-0000-0000-000000000008', 'Sésame', 'Graines de sésame', ARRAY['sésame', 'sesame', 'tahini']);
+
+-- Insert sample products
+INSERT INTO products (id, name, barcode, brand, ingredients, allergen_info)
+VALUES
+  ('bbbb1111-0000-0000-0000-000000000001', 'Pain de mie complet', '1234567890123', 'Boulangerie Bio', 'Farine de blé complet, eau, levure, sel, sucre', 'Contient du gluten'),
+  ('bbbb1111-0000-0000-0000-000000000002', 'Yaourt nature', '2345678901234', 'Danone', 'Lait entier, ferments lactiques', 'Contient du lait'),
+  ('bbbb1111-0000-0000-0000-000000000003', 'Barre chocolat-cacahuètes', '3456789012345', 'Snickers', 'Chocolat, arachides, caramel, nougat', 'Contient arachides, lait. Peut contenir fruits à coque'),
+  ('bbbb1111-0000-0000-0000-000000000004', 'Salade de thon', '4567890123456', 'Bonduelle', 'Thon, mayonnaise, œufs, légumes', 'Contient poisson, œufs'),
+  ('bbbb1111-0000-0000-0000-000000000005', 'Biscuits aux amandes', '5678901234567', 'Lu', 'Farine de blé, amandes, beurre, sucre, œufs', 'Contient gluten, fruits à coque, lait, œufs');

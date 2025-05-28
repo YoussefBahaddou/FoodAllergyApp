@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@drawable/bg_allergen_warning">
+
+    <TextView
+        android:id="@+id/tv_allergen_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Allergen Name"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:drawableStart="@drawable/ic_warning"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical" />
+
+</LinearLayout>

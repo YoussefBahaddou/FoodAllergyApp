@@ -6,8 +6,6 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
-    <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+    <!-- Exclude sensitive data from backup -->
+    <exclude domain="sharedpref" path="food_allergy_prefs.xml" />
 </full-backup-content>

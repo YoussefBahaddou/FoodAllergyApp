@@ -10,7 +10,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("Bienvenue dans Food Allergy App\n\nVotre assistant personnel pour détecter les allergènes dans vos aliments");
     }
 
     public LiveData<String> getText() {
