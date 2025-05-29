@@ -1,26 +1,20 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
-        maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots") }
+        maven { url = uri("https://jitpack.io") } // For GitHub dependencies
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") } // For snapshot versions
     }
 }
 
-rootProject.name = "FoodAllergyApp"
+rootProject.name = "Food Allergy App"
 include(":app")
- 

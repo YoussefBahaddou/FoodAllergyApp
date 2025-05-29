@@ -8,149 +8,83 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.UUID;
 
 import ma.emsi.foodallergyapp.databinding.FragmentHistoryBinding;
+import ma.emsi.foodallergyapp.model.ScanHistory;
 import ma.emsi.foodallergyapp.utils.SessionManager;
-import ma.emsi.foodallergyapp.utils.SupabaseClientHelper;
 
 public class HistoryFragment extends Fragment {
 
     private FragmentHistoryBinding binding;
-    private HistoryAdapter adapter;
-    private List<HistoryItem> historyList;
+    private HistoryViewModel historyViewModel;
     private SessionManager sessionManager;
-    private SupabaseClientHelper supabaseClient;
+    private HistoryAdapter historyAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
+
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        sessionManager = new SessionManager(getContext());
-        supabaseClient = SupabaseClientHelper.getInstance();
+        // Initialize session manager
+        sessionManager = new SessionManager(requireContext());
 
         setupRecyclerView();
-        loadHistoryData();
+        setupObservers();
+        loadScanHistory();
+
         return root;
     }
 
     private void setupRecyclerView() {
-        historyList = new ArrayList<>();
-        adapter = new HistoryAdapter(historyList);
-        binding.recyclerHistory.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerHistory.setAdapter(adapter);
+        historyAdapter = new HistoryAdapter(new ArrayList<>());
+        binding.recyclerHistory.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerHistory.setAdapter(historyAdapter);
     }
 
-    private void loadHistoryData() {
-        String userId = sessionManager.getUserId();
-        if (userId == null) {
-            showError("User not logged in");
-            return;
-        }
-
-        // Show loading state
-        binding.progressBar.setVisibility(View.VISIBLE);
-        binding.recyclerHistory.setVisibility(View.GONE);
-        binding.textNoHistory.setVisibility(View.GONE);
-
-        supabaseClient.getScanHistory(userId, new SupabaseClientHelper.ScanHistoryListCallback() {
-            @Override
-            public void onSuccess(List<SupabaseClientHelper.ScanHistoryItem> scanHistoryItems) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        binding.progressBar.setVisibility(View.GONE);
-
-                        historyList.clear();
-                        for (SupabaseClientHelper.ScanHistoryItem scanItem : scanHistoryItems) {
-                            HistoryItem historyItem = convertToHistoryItem(scanItem);
-                            historyList.add(historyItem);
-                        }
-
-                        if (historyList.isEmpty()) {
-                            binding.textNoHistory.setVisibility(View.VISIBLE);
-                            binding.recyclerHistory.setVisibility(View.GONE);
-                        } else {
-                            binding.textNoHistory.setVisibility(View.GONE);
-                            binding.recyclerHistory.setVisibility(View.VISIBLE);
-                        }
-
-                        adapter.notifyDataSetChanged();
-                    });
-                }
+    private void setupObservers() {
+        historyViewModel.getScanHistory().observe(getViewLifecycleOwner(), scanHistoryList -> {
+            if (scanHistoryList != null && !scanHistoryList.isEmpty()) {
+                binding.recyclerHistory.setVisibility(View.VISIBLE);
+                binding.textNoHistory.setVisibility(View.GONE);
+                historyAdapter.updateHistory(scanHistoryList);
+            } else {
+                binding.recyclerHistory.setVisibility(View.GONE);
+                binding.textNoHistory.setVisibility(View.VISIBLE);
             }
+        });
 
-            @Override
-            public void onError(String error) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        binding.progressBar.setVisibility(View.GONE);
-                        showError("Failed to load history: " + error);
-                        loadMockData(); // Fallback to mock data
-                    });
-                }
+        historyViewModel.getLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        });
+
+        historyViewModel.getError().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private HistoryItem convertToHistoryItem(SupabaseClientHelper.ScanHistoryItem scanItem) {
-        String productName = "Product: " + scanItem.getScanInput();
-        String result;
-
-        if (scanItem.isSafe()) {
-            result = "Aucun allergène détecté";
+    private void loadScanHistory() {
+        // Get user ID as UUID, then convert to String for API call
+        UUID userIdUUID = sessionManager.getUserIdAsUUID();
+        if (userIdUUID != null) {
+            String userId = userIdUUID.toString();
+            historyViewModel.loadScanHistory(userId);
         } else {
-            if (scanItem.getDetectedAllergens() != null && !scanItem.getDetectedAllergens().isEmpty()) {
-                result = "Contient: " + String.join(", ", scanItem.getDetectedAllergens());
+            // Handle case where user ID is not available
+            String userId = sessionManager.getUserId(); // Get as String directly
+            if (userId != null) {
+                historyViewModel.loadScanHistory(userId);
             } else {
-                result = "Allergènes détectés";
+                Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             }
-        }
-
-        String timestamp = formatTimestamp(scanItem.getScannedAt());
-
-        return new HistoryItem(productName, result, timestamp, scanItem.isSafe());
-    }
-
-    private String formatTimestamp(String timestamp) {
-        try {
-            // Parse the timestamp and format it nicely
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-            Date date = inputFormat.parse(timestamp);
-            return outputFormat.format(date);
-        } catch (Exception e) {
-            return timestamp; // Return original if parsing fails
-        }
-    }
-
-    private void loadMockData() {
-        // Fallback mock data
-        historyList.clear();
-        historyList.add(new HistoryItem("Coca-Cola", "Aucun allergène détecté", "Aujourd'hui 14:30", true));
-        historyList.add(new HistoryItem("Pain aux amandes", "Contient: Fruits à coque", "Hier 16:45", false));
-        historyList.add(new HistoryItem("Yaourt nature", "Contient: Lait", "Hier 12:20", false));
-
-        if (historyList.isEmpty()) {
-            binding.textNoHistory.setVisibility(View.VISIBLE);
-            binding.recyclerHistory.setVisibility(View.GONE);
-        } else {
-            binding.textNoHistory.setVisibility(View.GONE);
-            binding.recyclerHistory.setVisibility(View.VISIBLE);
-        }
-
-        adapter.notifyDataSetChanged();
-    }
-
-    private void showError(String message) {
-        if (getContext() != null) {
-            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -158,25 +92,5 @@ public class HistoryFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    public static class HistoryItem {
-        private String productName;
-        private String result;
-        private String timestamp;
-        private boolean isSafe;
-
-        public HistoryItem(String productName, String result, String timestamp, boolean isSafe) {
-            this.productName = productName;
-            this.result = result;
-            this.timestamp = timestamp;
-            this.isSafe = isSafe;
-        }
-
-        // Getters
-        public String getProductName() { return productName; }
-        public String getResult() { return result; }
-        public String getTimestamp() { return timestamp; }
-        public boolean isSafe() { return isSafe; }
     }
 }

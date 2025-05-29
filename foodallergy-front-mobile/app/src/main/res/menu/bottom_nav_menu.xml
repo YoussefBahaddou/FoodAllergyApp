@@ -2,22 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_scanner"
+        android:id="@+id/nav_scanner"
         android:icon="@drawable/ic_scanner"
         android:title="@string/title_scanner" />
 
     <item
-        android:id="@+id/navigation_allergies"
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/title_chat" />
+
+    <item
+        android:id="@+id/nav_allergies"
         android:icon="@drawable/ic_allergies"
         android:title="@string/title_allergies" />
 
     <item
-        android:id="@+id/navigation_profile"
+        android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
         android:title="@string/title_profile" />
 

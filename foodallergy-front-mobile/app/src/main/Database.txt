@@ -101,3 +101,32 @@ VALUES
   ('bbbb1111-0000-0000-0000-000000000003', 'Barre chocolat-cacahuètes', '3456789012345', 'Snickers', 'Chocolat, arachides, caramel, nougat', 'Contient arachides, lait. Peut contenir fruits à coque'),
   ('bbbb1111-0000-0000-0000-000000000004', 'Salade de thon', '4567890123456', 'Bonduelle', 'Thon, mayonnaise, œufs, légumes', 'Contient poisson, œufs'),
   ('bbbb1111-0000-0000-0000-000000000005', 'Biscuits aux amandes', '5678901234567', 'Lu', 'Farine de blé, amandes, beurre, sucre, œufs', 'Contient gluten, fruits à coque, lait, œufs');
+
+
+***********************************************************************************************************************************************
+
+
+CREATE TABLE chat_conversations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    title TEXT DEFAULT 'Food Allergy Chat',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE chat_messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL,
+    message_text TEXT NOT NULL,
+    is_user_message BOOLEAN NOT NULL,
+    message_type TEXT DEFAULT 'text', -- 'text', 'product_info', 'allergy_advice'
+    metadata JSONB, -- Store additional context like product_id, allergen_ids
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (conversation_id) REFERENCES chat_conversations(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_chat_conversations_user_id ON chat_conversations(user_id);
+CREATE INDEX idx_chat_messages_conversation_id ON chat_messages(conversation_id);
+CREATE INDEX idx_chat_messages_created_at ON chat_messages(created_at);
+
