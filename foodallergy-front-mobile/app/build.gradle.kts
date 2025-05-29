@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "ma.emsi.foodallergyapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ma.emsi.foodallergyapp"
@@ -17,7 +17,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "GEMINI_API_KEY", "\"AIzaSyBUunzWBjsfZU0BmbP9s-kOLNRl4t-VMMU\"")
+        }
         release {
+            buildConfigField("String", "GEMINI_API_KEY", "\"AIzaSyBUunzWBjsfZU0BmbP9s-kOLNRl4t-VMMU\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -25,7 +29,6 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -36,8 +39,7 @@ android {
 
     buildFeatures {
         viewBinding = true
-        // Remove dataBinding to avoid configuration cache issues
-        // dataBinding = true
+        buildConfig = true
     }
 
     packaging {
@@ -58,11 +60,14 @@ android {
 }
 
 dependencies {
+
+    implementation (libs.google.guava)
+    implementation (libs.generativeai)
     // Core Android dependencies
-    implementation("androidx.core:core:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+    implementation(libs.core)
+    implementation(libs.appcompat.v170)
+    implementation(libs.constraintlayout.v221)
+    implementation(libs.coordinatorlayout)
     implementation("androidx.fragment:fragment:1.6.2")
     implementation("androidx.activity:activity:1.8.2")
 

@@ -1,25 +1,30 @@
 package ma.emsi.foodallergyapp.model;
 
-import java.util.UUID;
-
 public class ChatRequest {
-    private UUID userId;
+    private String userId;
     private String message;
-    private UUID conversationId;
+    private String conversationId;
 
-    public ChatRequest(UUID userId, String message, UUID conversationId) {
+    public ChatRequest() {}
+
+    public ChatRequest(String userId, String message) {
+        this.userId = userId;
+        this.message = message;
+    }
+
+    public ChatRequest(String userId, String message, String conversationId) {
         this.userId = userId;
         this.message = message;
         this.conversationId = conversationId;
     }
 
     // Getters and Setters
-    public UUID getUserId() { return userId; }
-    public void setUserId(UUID userId) { this.userId = userId; }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
 
-    public UUID getConversationId() { return conversationId; }
-    public void setConversationId(UUID conversationId) { this.conversationId = conversationId; }
+    public String getConversationId() { return conversationId; }
+    public void setConversationId(String conversationId) { this.conversationId = conversationId; }
 }

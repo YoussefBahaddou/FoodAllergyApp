@@ -1,32 +1,64 @@
 package ma.emsi.foodallergyapp.model;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import com.google.gson.annotations.SerializedName;
 
 public class ChatResponse {
-    private UUID conversationId;
-    private String botResponse;
-    private String messageType;
-    private LocalDateTime timestamp;
+    @SerializedName("response")
+    private String response;
+
+    @SerializedName("message")
+    private String message;
+
+    @SerializedName("conversation_id")
+    private String conversationId;
+
+    @SerializedName("success")
     private boolean success;
+
+    @SerializedName("error")
     private String error;
 
+    public ChatResponse() {}
+
     // Getters and Setters
-    public UUID getConversationId() { return conversationId; }
-    public void setConversationId(UUID conversationId) { this.conversationId = conversationId; }
+    public String getResponse() {
+        // Try both 'response' and 'message' fields
+        return response != null ? response : message;
+    }
 
-    public String getBotResponse() { return botResponse; }
-    public void setBotResponse(String botResponse) { this.botResponse = botResponse; }
+    public void setResponse(String response) {
+        this.response = response;
+    }
 
-    public String getMessageType() { return messageType; }
-    public void setMessageType(String messageType) { this.messageType = messageType; }
+    public String getMessage() {
+        return message;
+    }
 
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-    public boolean isSuccess() { return success; }
-    public void setSuccess(boolean success) { this.success = success; }
+    public String getConversationId() {
+        return conversationId;
+    }
 
-    public String getError() { return error; }
-    public void setError(String error) { this.error = error; }
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 }

@@ -1,5 +1,11 @@
 [versions]
 agp = "8.7.2"
+appcompatVersion = "1.7.0"
+constraintlayoutVersion = "2.2.1"
+coordinatorlayout = "1.3.0"
+core = "1.16.0"
+generativeai = "0.9.0"
+guavaVersion = "31.1-android"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -19,6 +25,12 @@ okio = "3.6.0"
 pickr = "1.5.0"
 
 [libraries]
+appcompat-v170 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
+constraintlayout-v221 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
+coordinatorlayout = { module = "androidx.coordinatorlayout:coordinatorlayout", version.ref = "coordinatorlayout" }
+core = { module = "androidx.core:core", version.ref = "core" }
+generativeai = { module = "com.google.ai.client.generativeai:generativeai", version.ref = "generativeai" }
+google-guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

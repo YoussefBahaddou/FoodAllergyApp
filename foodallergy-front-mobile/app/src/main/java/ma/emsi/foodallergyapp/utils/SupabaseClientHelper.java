@@ -1,6 +1,9 @@
 package ma.emsi.foodallergyapp.utils;
 
 import android.util.Log;
+
+import ma.emsi.foodallergyapp.api.SupabaseApiClient;
+import ma.emsi.foodallergyapp.api.SupabaseChatService;
 import ma.emsi.foodallergyapp.model.Allergen;
 import ma.emsi.foodallergyapp.model.ScanResult;
 import ma.emsi.foodallergyapp.ui.allergies.AllergySelectionActivity;
@@ -1007,5 +1010,17 @@ public class SupabaseClientHelper {
 
         public List<String> getDetectedAllergens() { return detectedAllergens; }
         public void setDetectedAllergens(List<String> detectedAllergens) { this.detectedAllergens = detectedAllergens; }
+    }
+
+    public static SupabaseChatService getChatService() {
+        return SupabaseApiClient.getChatService();
+    }
+
+    public static String getSupabaseUrl() {
+        return SUPABASE_URL;
+    }
+
+    public static String getAnonKey() {
+        return SUPABASE_ANON_KEY;
     }
 }
