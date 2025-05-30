@@ -17,6 +17,8 @@
     <string name="menu_allergies">My Allergies</string>
     <string name="menu_manage_allergies">Manage Allergies</string>
     <string name="menu_logout">Logout</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_chat">Chat</string>
 
     <!-- Navigation titles -->
     <string name="title_home">Home</string>
@@ -256,6 +258,22 @@
     <string name="logout">Logout</string>
     <string name="edit_profile">Edit profile</string>
     <string name="profile_updated">Profile updated</string>
-    <string name="menu_chat">Chat</string>
     <string name="title_chat">Chat</string>
+
+    <!-- Map Strings -->
+    <string name="filter_locations">Filter Locations</string>
+    <string name="emergency_services">Emergency Services</string>
+    <string name="allergy_safe_restaurants">Allergy-Safe Restaurants</string>
+    <string name="allergy_safe_stores">Allergy-Safe Stores</string>
+    <string name="my_location">My Location</string>
+    <string name="location_permission_required">Location permission is required to show nearby locations</string>
+    <string name="location_permission_denied">Location permission denied. Please enable it in settings.</string>
+    <string name="error_loading_locations">Error loading locations. Please try again.</string>
+    <string name="no_locations_found">No locations found in this area</string>
+    <string name="location_details">Location Details</string>
+    <string name="call">Call</string>
+    <string name="directions">Directions</string>
+    <string name="allergy_safe_features">Allergy-Safe Features</string>
+    <string name="title_map">Map</string>
+    <string name="map_description">Find emergency services and allergy-safe places near you</string>
 </resources>
