@@ -11,10 +11,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") } // For GitHub dependencies
-        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") } // For snapshot versions
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
-rootProject.name = "Food Allergy App"
+rootProject.name = "FoodAllergyApp"
 include(":app")

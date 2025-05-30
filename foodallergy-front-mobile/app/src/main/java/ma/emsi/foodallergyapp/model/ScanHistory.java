@@ -15,9 +15,15 @@ public class ScanHistory {
     private Date scannedAt;
     private String productName;
     private String productBrand;
+    private String status;
+    private String timeAgo;
 
     // Default constructor
-    public ScanHistory() {}
+    public ScanHistory() {
+        this.scannedAt = new Date();
+        this.status = "Unknown";
+        this.timeAgo = "Just now";
+    }
 
     // Constructor with essential fields
     public ScanHistory(UUID userId, String scanType, String scanInput, boolean isSafe) {
@@ -26,6 +32,8 @@ public class ScanHistory {
         this.scanInput = scanInput;
         this.isSafe = isSafe;
         this.scannedAt = new Date();
+        this.status = isSafe ? "Safe" : "Unsafe";
+        this.timeAgo = "Just now";
     }
 
     // Getters and Setters
@@ -75,6 +83,7 @@ public class ScanHistory {
 
     public void setSafe(boolean safe) {
         isSafe = safe;
+        this.status = isSafe ? "Safe" : "Unsafe";
     }
 
     public List<String> getDetectedAllergens() {
@@ -109,6 +118,22 @@ public class ScanHistory {
         this.productBrand = productBrand;
     }
 
+    public String getStatus() {
+        return status != null ? status : (isSafe ? "Safe" : "Unsafe");
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTimeAgo() {
+        return timeAgo != null ? timeAgo : "Just now";
+    }
+
+    public void setTimeAgo(String timeAgo) {
+        this.timeAgo = timeAgo;
+    }
+
     @Override
     public String toString() {
         return "ScanHistory{" +
@@ -122,6 +147,8 @@ public class ScanHistory {
                 ", scannedAt=" + scannedAt +
                 ", productName='" + productName + '\'' +
                 ", productBrand='" + productBrand + '\'' +
+                ", status='" + status + '\'' +
+                ", timeAgo='" + timeAgo + '\'' +
                 '}';
     }
 }

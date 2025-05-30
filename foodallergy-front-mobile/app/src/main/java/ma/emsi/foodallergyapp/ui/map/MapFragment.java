@@ -78,15 +78,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Set initial visibility
         btnScan.setVisibility(View.GONE);
         
+        // Set initial selection to emergency services
+        Chip emergencyChip = view.findViewById(R.id.chip_emergency);
+        emergencyChip.setChecked(true);
+        
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            // Check if the scan nearby chip is selected
-            boolean scanNearbySelected = (checkedId == R.id.chip_scan_nearby);
-            
-            // Show/hide scan button based on chip selection
-            btnScan.setVisibility(scanNearbySelected ? View.VISIBLE : View.GONE);
-            
-            // Only update markers if scan nearby is not selected
-            if (!scanNearbySelected) {
+            if (checkedId == R.id.chip_scan_nearby) {
+                btnScan.setVisibility(View.VISIBLE);
+                // Clear existing markers when switching to scan mode
+                clearMarkers();
+            } else {
+                btnScan.setVisibility(View.GONE);
+                // Update markers for other filters
                 updateMapMarkers();
             }
         });
