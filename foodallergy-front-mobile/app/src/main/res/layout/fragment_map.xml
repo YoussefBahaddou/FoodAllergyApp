@@ -60,7 +60,24 @@
                     android:text="@string/allergy_safe_stores"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_scan_nearby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scan_nearby_locations"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
             </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/scan_nearby"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:icon="@drawable/ic_scan"
+                style="@style/Widget.MaterialComponents.Button"/>
 
         </LinearLayout>
 

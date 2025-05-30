@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,6 +42,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationClient;
     private List<Location> locations = new ArrayList<>();
     private List<Marker> markers = new ArrayList<>();
+    private MaterialButton btnScan;
+    private boolean isScanning = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,13 +65,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Setup location button
         setupLocationButton(view);
 
+        // Setup scan button
+        setupScanButton(view);
+
         return view;
     }
 
     private void setupFilterChips(View view) {
         ChipGroup chipGroup = view.findViewById(R.id.filter_chip_group);
-        chipGroup.setOnCheckedChangeListener((group, checkedIds) -> {
-            updateMapMarkers();
+        btnScan = view.findViewById(R.id.btn_scan);
+        
+        // Set initial visibility
+        btnScan.setVisibility(View.GONE);
+        
+        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            // Check if the scan nearby chip is selected
+            boolean scanNearbySelected = (checkedId == R.id.chip_scan_nearby);
+            
+            // Show/hide scan button based on chip selection
+            btnScan.setVisibility(scanNearbySelected ? View.VISIBLE : View.GONE);
+            
+            // Only update markers if scan nearby is not selected
+            if (!scanNearbySelected) {
+                updateMapMarkers();
+            }
         });
     }
 
@@ -77,6 +97,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         fab.setOnClickListener(v -> {
             if (checkLocationPermission()) {
                 getCurrentLocation();
+            } else {
+                requestLocationPermission();
+            }
+        });
+    }
+
+    private void setupScanButton(View view) {
+        btnScan = view.findViewById(R.id.btn_scan);
+        btnScan.setOnClickListener(v -> {
+            if (checkLocationPermission()) {
+                startScanning();
             } else {
                 requestLocationPermission();
             }
@@ -102,6 +133,50 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Load locations
         loadLocations();
+
+        // Set default camera position to Casablanca
+        LatLng casablanca = new LatLng(33.5731, -7.5898);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(casablanca, 12));
+
+        // Set marker click listener
+        mMap.setOnMarkerClickListener(marker -> {
+            Location location = (Location) marker.getTag();
+            if (location != null) {
+                showLocationDetails(location);
+            }
+            return true;
+        });
+    }
+
+    private void showLocationDetails(Location location) {
+        // Create and show a dialog with location details
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_location_details, null);
+        
+        // Set location details
+        ((android.widget.TextView) dialogView.findViewById(R.id.tv_location_name)).setText(location.getName());
+        ((android.widget.TextView) dialogView.findViewById(R.id.tv_location_address)).setText(location.getAddress());
+        ((android.widget.TextView) dialogView.findViewById(R.id.tv_location_description)).setText(location.getDescription());
+        ((android.widget.TextView) dialogView.findViewById(R.id.tv_location_phone)).setText(location.getPhoneNumber());
+
+        // Setup call button
+        dialogView.findViewById(R.id.btn_call).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + location.getPhoneNumber()));
+            startActivity(intent);
+        });
+
+        // Setup directions button
+        dialogView.findViewById(R.id.btn_directions).setOnClickListener(v -> {
+            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.getLatitude() + "," + location.getLongitude());
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
+        });
+
+        builder.setView(dialogView);
+        builder.setPositiveButton("OK", null);
+        builder.show();
     }
 
     private boolean checkLocationPermission() {
@@ -133,36 +208,79 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void loadLocations() {
-        // TODO: Load locations from your backend
-        // For now, we'll add some sample locations
-        addSampleLocations();
-    }
-
-    private void addSampleLocations() {
-        // Add sample emergency locations
+        // Add Moroccan emergency locations
         locations.add(new Location(
                 "1",
-                "Emergency Medical Center",
-                "123 Main St",
+                "Hôpital Ibn Rochd",
+                "Avenue Hassan II, Casablanca",
                 33.5731, -7.5898,
                 "EMERGENCY",
-                "24/7 Emergency Medical Services",
-                "+212-123-456-789",
+                "Centre hospitalier universitaire avec service d'urgence 24/7",
+                "+212-522-482-000",
                 false,
                 null
         ));
 
-        // Add sample allergy-safe restaurant
         locations.add(new Location(
                 "2",
-                "Allergy-Safe Restaurant",
-                "456 Food Ave",
+                "Clinique Al Shifa",
+                "Boulevard Anfa, Casablanca",
                 33.5732, -7.5899,
+                "EMERGENCY",
+                "Clinique privée avec service d'urgence",
+                "+212-522-482-111",
+                false,
+                null
+        ));
+
+        // Add Moroccan allergy-safe restaurants
+        locations.add(new Location(
+                "3",
+                "Restaurant Le Petit Chef",
+                "Rue Mohammed V, Casablanca",
+                33.5733, -7.5900,
                 "RESTAURANT",
-                "Dedicated allergy-safe kitchen",
-                "+212-987-654-321",
+                "Restaurant avec options sans allergènes",
+                "+212-522-482-222",
                 true,
-                new String[]{"Gluten-free options", "Nut-free kitchen", "Dairy-free menu"}
+                new String[]{"Options sans gluten", "Cuisine sans noix", "Menu sans produits laitiers"}
+        ));
+
+        locations.add(new Location(
+                "4",
+                "La Table du Maroc",
+                "Avenue Hassan I, Casablanca",
+                33.5734, -7.5901,
+                "RESTAURANT",
+                "Restaurant traditionnel marocain avec options sans allergènes",
+                "+212-522-482-333",
+                true,
+                new String[]{"Options sans gluten", "Cuisine sans noix", "Menu végétarien"}
+        ));
+
+        // Add Moroccan allergy-safe stores
+        locations.add(new Location(
+                "5",
+                "Bio Market",
+                "Boulevard Zerktouni, Casablanca",
+                33.5735, -7.5902,
+                "STORE",
+                "Magasin bio avec section sans allergènes",
+                "+212-522-482-444",
+                true,
+                new String[]{"Produits sans gluten", "Produits sans noix", "Produits sans lactose"}
+        ));
+
+        locations.add(new Location(
+                "6",
+                "Naturalia",
+                "Rue Tariq Ibn Ziad, Casablanca",
+                33.5736, -7.5903,
+                "STORE",
+                "Magasin de produits naturels et bio",
+                "+212-522-482-555",
+                true,
+                new String[]{"Produits bio", "Section sans allergènes", "Produits locaux"}
         ));
 
         updateMapMarkers();
@@ -179,6 +297,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         boolean showEmergency = isChipSelected(R.id.chip_emergency);
         boolean showRestaurants = isChipSelected(R.id.chip_restaurants);
         boolean showStores = isChipSelected(R.id.chip_stores);
+
+        // If no filters are selected, show all markers
+        if (!showEmergency && !showRestaurants && !showStores) {
+            showEmergency = true;
+            showRestaurants = true;
+            showStores = true;
+        }
 
         // Add markers for filtered locations
         for (Location location : locations) {
@@ -210,6 +335,95 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private boolean isChipSelected(int chipId) {
         Chip chip = requireView().findViewById(chipId);
         return chip != null && chip.isChecked();
+    }
+
+    private void startScanning() {
+        if (isScanning) return;
+        
+        isScanning = true;
+        btnScan.setEnabled(false);
+        Toast.makeText(requireContext(), R.string.scanning_locations, Toast.LENGTH_SHORT).show();
+
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(requireActivity(), location -> {
+                        if (location != null) {
+                            LatLng currentLocation = new LatLng(
+                                    location.getLatitude(),
+                                    location.getLongitude()
+                            );
+                            // Move camera to current location
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    currentLocation, 15));
+                            
+                            // Clear existing markers
+                            clearMarkers();
+                            
+                            // Add nearby locations
+                            addNearbyLocations(currentLocation);
+                            
+                            // Show completion message
+                            Toast.makeText(requireContext(), R.string.scan_complete, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(requireContext(), 
+                                R.string.error_loading_locations, 
+                                Toast.LENGTH_SHORT).show();
+                        }
+                        isScanning = false;
+                        btnScan.setEnabled(true);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(requireContext(), 
+                            R.string.error_loading_locations, 
+                            Toast.LENGTH_SHORT).show();
+                        isScanning = false;
+                        btnScan.setEnabled(true);
+                    });
+        }
+    }
+
+    private void addNearbyLocations(LatLng center) {
+        // In a real app, this would make API calls to get nearby places
+        // For now, we'll add some sample locations around the current position
+        
+        // Add a hospital
+        locations.add(new Location(
+                "nearby1",
+                "Hôpital Proche",
+                "À proximité de votre position",
+                center.latitude + 0.002,
+                center.longitude + 0.002,
+                "EMERGENCY",
+                "Service d'urgence disponible 24/7",
+                "+212-522-000-001",
+                false,
+                null
+        ));
+
+        // Add a store
+        locations.add(new Location(
+                "nearby2",
+                "Magasin Bio Proche",
+                "À proximité de votre position",
+                center.latitude - 0.002,
+                center.longitude - 0.002,
+                "STORE",
+                "Section produits sans allergènes",
+                "+212-522-000-002",
+                true,
+                new String[]{"Produits sans gluten", "Produits sans noix"}
+        ));
+
+        updateMapMarkers();
+    }
+
+    private void clearMarkers() {
+        for (Marker marker : markers) {
+            marker.remove();
+        }
+        markers.clear();
+        locations.clear();
     }
 
     @Override

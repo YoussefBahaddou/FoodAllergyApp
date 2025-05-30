@@ -265,6 +265,10 @@
     <string name="emergency_services">Emergency Services</string>
     <string name="allergy_safe_restaurants">Allergy-Safe Restaurants</string>
     <string name="allergy_safe_stores">Allergy-Safe Stores</string>
+    <string name="scan_nearby_locations">Scan Nearby Locations</string>
+    <string name="scan_nearby">Scan Nearby</string>
+    <string name="scanning_locations">Scanning nearby locations...</string>
+    <string name="scan_complete">Scan complete</string>
     <string name="my_location">My Location</string>
     <string name="location_permission_required">Location permission is required to show nearby locations</string>
     <string name="location_permission_denied">Location permission denied. Please enable it in settings.</string>
