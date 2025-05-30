@@ -17,7 +17,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ce971ca-0306-4668-a123-2ae401fc30b4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Database.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Database.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/foodallergy-front-mobile/app/src/main/Database.txt" beforeDir="false" afterPath="$PROJECT_DIR$/foodallergy-front-mobile/app/src/main/Database.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +39,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="test-with-errors" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -50,7 +53,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/YoussefBahaddou/FoodAllergyApp.git",
-    "accountId": "e5c72e32-c342-4fd3-87f6-fd38641d8a8e"
+    "accountId": "b1bf3960-d508-4848-ab51-fc5e67d568d4"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
@@ -82,10 +85,10 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "checkpoint",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/FG/AndroidStudioProjects/FoodAllergyApp/foodallergy-front-mobile",
+    "last_opened_file_path": "/home/younes/AndroidStudioProjects/FoodAllergyApp2/foodallergy-front-mobile",
     "settings.editor.selected.configurable": "advanced.settings",
     "show.migrate.to.gradle.popup": "false"
   }
@@ -172,6 +175,17 @@
       <updated>1748266788546</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">

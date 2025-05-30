@@ -9,7 +9,6 @@ CREATE TABLE users (
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL, -- Store hashed password
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ========================
@@ -36,7 +35,44 @@ CREATE TABLE user_allergens (
 );
 
 -- ========================
--- 4. INDEXES FOR PERFORMANCE
+-- 4. PRODUCTS TABLE (Many-to-Many)
+-- ========================
+
+CREATE TABLE products (
+    id UUID PRIMARY KEY,
+    name TEXT,
+    barcode TEXT,
+    brand TEXT,
+    ingredients TEXT,
+    allergen_info TEXT,
+    created_at TIMESTAMP WITHOUT TIME ZONE
+);
+
+-- ========================
+-- 5. SCAN HISTORY (Many-to-Many)
+-- ========================
+
+CREATE TABLE scan_history (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    product_id UUID NOT NULL,
+    scan_type TEXT,
+    scan_input TEXT,
+    is_safe BOOLEAN,
+    detected_allergens TEXT[],
+    scanned_at TIMESTAMP WITHOUT TIME ZONE
+);
+
+ALTER TABLE scan_history
+ADD CONSTRAINT fk_scan_history_user
+FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE scan_history
+ADD CONSTRAINT fk_scan_history_product
+FOREIGN KEY (product_id) REFERENCES products(id);
+
+-- ========================
+-- INDEXES FOR PERFORMANCE
 -- ========================
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_user_allergens_user_id ON user_allergens(user_id);

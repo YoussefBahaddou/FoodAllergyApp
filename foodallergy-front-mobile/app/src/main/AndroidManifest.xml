@@ -44,12 +44,12 @@
 
         <!-- Authentication Activities -->
         <activity
-            android:name=".ui.auth.LoginActivity"
+            android:name=".auth.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.FoodAllergyApp.NoActionBar" />
 
         <activity
-            android:name=".ui.auth.SignupActivity"
+            android:name=".auth.SignupActivity"
             android:exported="false"
             android:theme="@style/Theme.FoodAllergyApp.NoActionBar" />
 
@@ -58,7 +58,7 @@
             android:name=".ui.scanner.ScannerActivity"
             android:exported="false"
             android:theme="@style/Theme.FoodAllergyApp.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <!-- Other Activities -->
         <activity
